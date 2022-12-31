@@ -9,8 +9,6 @@ This guideline **does not cover** standard `Home Assistant` setup procedure, inc
 
 # Table of Contents:
 
-- [Home Assistant setup](#home-assistant-setup)
-- [Table of Contents:](#table-of-contents)
 - [Environment measurements using custom ESP32 board and IKEA VINDRIKTNING sensor](#environment-measurements-using-custom-esp32-board-and-ikea-vindriktning-sensor)
   - [Removing IKEA board and adjusting the case](#removing-ikea-board-and-adjusting-the-case)
   - [Wiring and internal setup](#wiring-and-internal-setup)
@@ -95,7 +93,7 @@ esp_sleep_enable_timer_wakeup(300 * 1000000);
 
 # To-Do:
 
-- Home Assistant setup
+- Home Assistant sensors setup
 - MQTT setup
 - Sensors definition
 - Dashboard
