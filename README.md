@@ -46,13 +46,13 @@ Don't forget to keep the particle senzor inside, we will use it and connect to n
 
 Using [μŠup, STEMMA QT, Qwiic JST-SH 4-pin cable - 5cm](https://www.laskakit.cz/--sup--stemma-qt--qwiic-jst-sh-4-pin-kabel-5cm/) connect the board with [LaskaKit SCD41 Sensor](https://www.laskakit.cz/laskakit-scd41-senzor-co2--teploty-a-vlhkosti-vzduchu/). The board contains 2 `μŠup` sockets so you can choose any of them. Then connect FAN and particle sensor to sockets on the board - no worries, both sockets are clearly described on the board.
 
-Now you need to plase `SCD41` sensor properly inside the case. Once done, you can close the case and put all the screws.
+Now you need to place `SCD41` sensor properly inside the case. Once done, you can close the case and put all the screws.
 
 ## The coding stuff
 
-See the [inside-environment](inside-environment/) for the code. The folder contain template code which you can use and adjust as you want.
+See the [inside-environment](./inside-environment/) for the code. The folder contain template code which you can use and adjust as you want.
 
-**Adjust variables in the template**
+**Adjust variables in the template code**
 
 ```c++
   // LEDs brightness
@@ -74,14 +74,14 @@ See the [inside-environment](inside-environment/) for the code. The folder conta
   - DEBUG
 ```
 
-If you think that measured temperature is not accurate, use anothe device to measure temperature and adjust following contant with difference:
+If you think that measured temperature is not accurate, use anothe device to measure temperature and adjust following constant with measured difference:
 ```
   - TEMP_CONST
 ```
 
 It really depends if your sensor measurement is affected by relatively near position of the ESP32 processor or not. You have to play with it.
 
-The rest of the code was tested by me and using it since early December 2022. I had several issues with deepsleep mode and Wifi, but I made several adjustiments (wifi.begin... disconnect... etc.).
+The rest of the code was tested by me and using it since early December 2022. I had several issues with deepsleep mode and Wifi, but I made several adjustments (wifi.begin... disconnect... etc.).
 
 If you need to change the deepsleep period, adjust the following code:
 
@@ -91,9 +91,12 @@ If you need to change the deepsleep period, adjust the following code:
 esp_sleep_enable_timer_wakeup(300 * 1000000);
 ```
 
-# To-Do:
+# To-Do
 
 - Home Assistant sensors setup
 - MQTT setup
 - Sensors definition
 - Dashboard
+
+>**Note:**<br>
+>Sorry for typos.
