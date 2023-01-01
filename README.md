@@ -59,8 +59,11 @@ There are plenty of guidelines how to setup Arduino IDE to work with ESP boards.
 - install `PubSubClient`
 - choose correct serial port after you connect board to your laptop
 
+>**Important note:**<br>
+>Don't forget to change speed rate on port to `115200` in order to flash and connect properly to the ESP32 board. 
+
 >**Note:**<br>
->To make it easier for you - to connect to your laptop use the USB-C to USB-A cable instead of only USB-C. With only USB-C cable, the development board did not connect to my laptop (Macbook Pro M1).
+>To make it easier for you - to connect to your laptop use the USB-C to USB-A cable instead of only USB-C. With only USB-C cable, the development board did not connect to my laptop (Macbook Pro M1). The board is build with automated detection of serial connection to a computer, so you don't need to reboot the board to flashmode manually.
 
 ## The coding stuff
 
@@ -69,23 +72,23 @@ See the [inside-environment](inside-environment/) for the code. The folder conta
 **Adjust variables in the template**
 
 ```c++
-  // LEDs brightness
-  - BRIGHTNESS
+// LEDs brightness
+- BRIGHTNESS
 
-  // Wifi
-  - ssid
-  - password
+// Wifi
+- ssid
+- password
 
-  // Check your hassio MQTT parameters and adjust:
-  - MQTT_CLIENT_ID
-  - MQTT_SERVER_IP
-  - MQTT_SERVER_PORT
-  - MQTT_USER
-  - MQTT_PASSWORD
-  - MQTT_SENSOR_TOPIC
+// Check your hassio MQTT parameters and adjust:
+- MQTT_CLIENT_ID
+- MQTT_SERVER_IP
+- MQTT_SERVER_PORT
+- MQTT_USER
+- MQTT_PASSWORD
+- MQTT_SENSOR_TOPIC
 
-  //In case of detailed logging to Serial, change this to 1, otherwise 0:
-  - DEBUG
+//In case of detailed logging to Serial, change this to 1, otherwise 0:
+- DEBUG
 ```
 
 If you think that measured temperature is not accurate, use anothe device to measure temperature and adjust following contant with difference:
