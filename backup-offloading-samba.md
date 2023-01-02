@@ -6,8 +6,6 @@ After couple of weeks of struggling to make a proper scripting setup, I find off
 
 # Table of Contents
 
-- [Daily backups with offloading of backup files to NAS or any other device using `Samba Backup` add-on](#daily-backups-with-offloading-of-backup-files-to-nas-or-any-other-device-using-samba-backup-add-on)
-- [Table of Contents](#table-of-contents)
 - [Basic idea and objectives](#basic-idea-and-objectives)
 - [Key functionalities, highlights of the setup](#key-functionalities-highlights-of-the-setup)
 - [Components](#components)
