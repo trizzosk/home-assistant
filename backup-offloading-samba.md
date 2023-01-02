@@ -135,7 +135,7 @@ Installation of `Samba Backup` add-on is pretty simple - just follow the officia
 Here is my setup (yaml config):
 
 ```yaml
-host: 192.168.0.101
+host: DNS_or_IP_address
 share: pishare
 target_dir: homeassistant-backups
 username: habackup
