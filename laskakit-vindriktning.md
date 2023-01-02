@@ -4,8 +4,6 @@ It was couple of months ago, back in 2022, I was browsing Twitter feed and one o
 
 # Table of contents
 
-- [Measuring environment data with IKEA Vindriktning sensor.... sort of :lol](#measuring-environment-data-with-ikea-vindriktning-sensor-sort-of-lol)
-- [Table of contents](#table-of-contents)
 - [Basic idea and objectives](#basic-idea-and-objectives)
 - [Key functionalities, highlights of the setup](#key-functionalities-highlights-of-the-setup)
 - [Components](#components)
