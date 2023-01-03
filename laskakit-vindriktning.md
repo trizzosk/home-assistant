@@ -1,6 +1,6 @@
 # Measuring environment data with IKEA Vindriktning sensor.... sort of :lol
 
-It was couple of months ago, back in 2022, I was browsing Twitter feed and one of guys I follow posted a message aboutthe LaskaKit development board and IKEA sensor sensor. Since the sensor looks pretty cool imho (yes, its' now nice, but fits in almost every possible interior design). Although he did not provide step-by-step procedure, I accepted a challenge to try it and lear something about ESP32 platform (in general). So, my journey started.
+It was couple of months ago, back in 2022, I was browsing Twitter feed and one of guys I follow posted a message about the `LaskaKit` development board and `IKEA Vindriktning` sensor. Since the sensor looks pretty cool (yes, its' not the most pretty, but it fits in almost every possible interior design). Although he did not provide any step-by-step procedure, I accepted a challenge to try it myself and learn something about ESP32 platform (in general). So, my journey started.
 
 # Table of contents
 
@@ -19,18 +19,18 @@ It was couple of months ago, back in 2022, I was browsing Twitter feed and one o
 
 # Basic idea and objectives
 
-My idea was, ehm still is, to measure temperature, humidity, temperature in every sector of our family apartment. Next step will be to reverse, maybe replace, Danfoss unit for heating management (current device is pretty dumb...). I want to dynamically change heating schemas according current environment conditions and planned activities (vacation mode, empty room,...).
+My idea was, ehm still is, to measure temperature, humidity and CO2 in every sector of our family apartment. Next step will be to reverse, maybe replace, Danfoss unit for heating management (current device is pretty dumb...). I want to dynamically change heating schemas according current environment conditions and planned activities (vacation mode, empty room,...).
 
 # Key functionalities, highlights of the setup
 
-- LaskaKit board is equipped with addressable LEDs', but I decided not to use them. So the sensor sends its values and statues only using MQTT. I find this pretty useful, especially for those who don't want to have any light in the room during nights
-- If you want to use LEDs' check the original code of LaskaKit (see the link down below).
-- I still use the particle meter. Once you do not want to measure particles in the air, you only need to unwire and remove the sensor from the case and adjusting code (removing references and functions + adjusting the MQTT + `Home Assistant` sensor config).
-- I use the deepsleep mode at the end of the loop to reduce electricity consumption (I know, ESP32 do have very little but still - it runs every 10 minutes.... so...). If you dont' want it, just comment part of the code at the end of the `loop()` and uncomment `delay(...)` right before the deepsleep section. Looping will function but there won't be any deepsleep between cycles.
+- LaskaKit board is equipped with addressable LEDs', but I decided not to use them. So the sensor sends its values and status only using MQTT. I find this pretty useful, especially for those who don't want to have any light in the room during nights
+- If you want to use LEDs', check the original code of LaskaKit (see the link down below).
+- I still use the original particle meter. Once you don't want to measure particles in the air, you only need to unwire fan and sensor, remove them from the case and adjust code (removing references and functions + adjusting the MQTT + `Home Assistant` sensor config). Try it yourself, it's very easy.
+- I use the deepsleep mode at the end of the loop to reduce electricity consumption (I know, ESP32 do have very little consumption but still - it runs every 10 minutes, so...). If you dont' want it, just comment part of the code at the end of the `loop()` and uncomment `delay(...)` right before the deepsleep section. Looping will function anyway but there won't be any deepsleep between cycles.
 
 # Components
 
-Down below I put the most important parts. Of course, you need to have working `Home Assistant` box in order to utilize and extent the functionalities as you want.
+Down below I put the most important parts of the setup. Of course, you need to have working `Home Assistant` box/instance in order to utilize and extent the functionalities as you want.
 
 **Hardware components:**
 
@@ -55,29 +55,26 @@ Down below I put the most important parts. Of course, you need to have working `
 
 ## Removing IKEA board and adjusting the case
 
-Replacing IKEA board from the `VINDRIKTNING` sensor is really easy stuff. THe only drawback is you need to adjust the hole for the USB-C input of the Laskakit board. This is pretty easy using little rasp or sandpaper and it only takes like couple of seconds.
+Replacing IKEA board from the `VINDRIKTNING` sensor is really easy stuff. The only drawback is you need to adjust the hole for the USB-C connector of the Laskakit board. This is pretty easy using little rasp or sandpaper and it only takes like couple of seconds.
 
-Don't forget to keep the particle senzor inside, we will use it and connect to new board. IKEA particle sensor contains 2 wires - FAN and sensor itself. Keep it inside, don't remove them.
+Don't forget to keep the particle senzor and fan inside, we will use it and connect to new board. IKEA particle sensor contains 2 wires - FAN and sensor itself. Keep it inside, don't remove them.
 
 ## Wiring and internal setup
 
 Using [μŠup, STEMMA QT, Qwiic JST-SH 4-pin cable - 5cm](https://www.laskakit.cz/--sup--stemma-qt--qwiic-jst-sh-4-pin-kabel-5cm/) connect the board with [LaskaKit SCD41 Sensor](https://www.laskakit.cz/laskakit-scd41-senzor-co2--teploty-a-vlhkosti-vzduchu/). The board contains 2 `μŠup` sockets so you can choose any of them. Then connect FAN and particle sensor to sockets on the board - no worries, both sockets are clearly described on the board.
 
-Now you need to plase `SCD41` sensor properly inside the case. Once done, you can close the case and put all the screws.
+Now you need to place `SCD41` sensor properly inside the case. Once done, you can close the case and put all the screws. You can experiment with some ESP32 processor cover, some kind of mounting frame for the SCD41 sensor.
 
 ## Arduino IDE setup
 
 There are plenty of guidelines how to setup Arduino IDE to work with ESP boards. In order to fully support all required functionalities in this guideline, you just need to do following:
-
 - add the ESP32 kit to your Arduino IDE
 - install `PubSubClient`
 - choose correct serial port after you connect board to your laptop
-
->**Important note:**<br>
->Don't forget to change speed rate on port to `115200` in order to flash and connect properly to the ESP32 board. 
+- change the speed rate of the port to `115200` in order to flash and connect properly to the ESP32 board.
 
 >**Note:**<br>
->To make it easier for you - to connect to your laptop use the USB-C to USB-A cable instead of only USB-C. With only USB-C cable, the development board did not connect to my laptop (Macbook Pro M1). The board is build with automated detection of serial connection to a computer, so you don't need to reboot the board to flashmode manually.
+>To make it easier for you - to connect the board to your laptop use the **USB-C to USB-A cable** instead of pure USB-C. With only USB-C cable, the development board did not connect to my laptop (Macbook Pro M1). The board is build with automated detection of serial connection to a computer, so you don't need to reboot the board to flashmode manually.
 
 ## The coding stuff
 
@@ -171,14 +168,14 @@ mqtt:
 | Parameter |  Description |
 | --- | --- |
 | `name` | The name of your sensor as it is used in Home Assistant for any other device name. |
-| `unique_id` | Basically its the `entity_id` as used for identify every device connected. This needs to be unique across your Home Assistant instance. I use prefix like room name and then I add measurement name - e.g. Living-Room-Temperature, *-Humidity, etc.. |
+| `unique_id` | Basically its the `entity_id` as used for identify every device connected. This needs to be unique across your Home Assistant instance. I use prefix like room name and then I add measurement name - e.g. Living-Room-Temperature, \*-Humidity, etc.. |
 | `state_topic` | The name of the MQTT endpoint where we publish data from our sensor - this has to be the same like we defined earlier in the code - see the variable `MQTT_SENSOR_TOPIC` above. |
 | `unit_of_measurement` | This is pretty clear, I guess. |
 | `value_template` | This commands the Home Assistant which value to look up in the JSON message in the broker. |
 
 # Homework
 
-Yes - based on this, you can easily create custom flows (e.g. using `Node-Red` addon), which will notify you in case of unhealth values measured (hih CO2 concentration, low/high humidity etc.). These can be pretty easy, but can be pretty complex as well (during summer, when average temperature of last 10 values higher -> turn on AC, set average -5 degrees for 30 minutes, etc.). It's up to you, I see the `Node-Red` is very very powerful.
+Yes - based on this, you can easily create custom flows (e.g. using `Node-Red` addon), which will notify you in case of unhealth values measured (high CO2 concentration, low/high humidity etc.). These can be pretty easy, but can be pretty complex as well (during summer, when average temperature of last 10 values higher than something -> turn on the AC, set average -5 degrees for 30 minutes, etc.). It's up to you, I see the `Node-Red` as very very powerful component.
 
 # TO-DO
 
