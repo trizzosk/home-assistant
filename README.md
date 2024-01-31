@@ -2,8 +2,10 @@
 
 This guideline **include** my setup of the `Home Assistant`, especially:
 - Environment measurements (temp, CO2, etc.) inside rooms
+- Simple status display using eink Lilygo EPD47 unit
 - Daily backups with offloading of backup files to NAS or any other device using `Samba Backup` add-on
 - Very simple, basic, Home alarm (sensors, management, etc.)
+- Custom nameday sensor with Slovakian names
 
 This guideline **does not cover/include** standard `Home Assistant` setup procedure (hardware and software), including booting from PCIe SSD, etc..
  
@@ -11,12 +13,24 @@ This guideline **does not cover/include** standard `Home Assistant` setup proced
 
 Detailed step-by-step procedure is in [this document](./laskakit-vindriktning.md).
 
+# Simple status display using eink Lilygo EPD47 unit
+
+Using quite cheap `Lilygo EPD47` eink diplay unit we have immediate overview about current status - details are [here](./eink-status.md).
+
 # Daily backups with backup offloading, using `Samba Backup` add-on
 
 Although my `Home Assistant` boots from SSD drive (attached using PCIe to IO board) with 512 GB of space, for doing proper backups you have to offload backups to another location, another device. Yes, I am not the enterprise, but I do not want to rely only on SSD drive. `Anything that can possibly go wrong, does.` - so doing proper backups is pretty important for me. Detailed procedure is described in [this document](./backup-offloading-samba.md).
+
+# Nameday sensor
+
+Let's be honest - I am not perfect. Quite often I forgot about names and nameday. Nothing really that much important, but still sometimes it's needed (especially about your family, right?).
+
+I tried several solutions and addons for Home assistant. Some good, some awful, some bad. I find a pretty simple json file on github which contains structured data - I made a fork of it but the original kudos goes to [@zoltancsontos](https://github.com/zoltancsontos) on github (original repo: [here](https://github.com/zoltancsontos/slovak-name-days-json)).
+
+More details and how it works - see [this document](./nameday-sensor/nameday-sensor.md).
 
 # To-Do:
 
 Additional chapters will be provided in upcoming days/weeks:
 - Custom, pretty easy and basic, home alarm using PIR and door sensors, Node-Red flows and Matrix messenger component for notifications and commands
-- e-INK display with enclosure for displaying environment measurements in fancy way.
+

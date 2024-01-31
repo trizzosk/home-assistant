@@ -1,0 +1,4 @@
+json
+datetime
+requests
+paho-mqtt
