@@ -16,13 +16,16 @@ python3 pip install -r requirements.txt
 
 ## Script for data download and parsing
 
-I used forked json file which originally is provided by [@zoltancsontos](https://github.com/zoltancsontos). 
+I used forked json file which originally is provided by [@zoltancsontos](https://github.com/zoltancsontos). Since the json key was starting with "0" I made a change and added dummy key.
 
 Example:
 
 ```json
 {
    "0":{
+    "1":"dummy"
+   },
+   "1":{
       "1":"Nový rok",
       "2":"Alexandra, Karina, Ábel, Makar, Karin, Kara, Kasandra, Sanda, Sandra, Saša, Senda",
       "3":"Daniela, Danila, Danuta, Genovéva, Radmila",
@@ -40,8 +43,8 @@ Example:
       ...
       ...
    },
-   "1":{
-    "1":"Tatiana, Hynek, Trifon, Táňa",
+   "2":{
+      "1":"Tatiana, Hynek, Trifon, Táňa",
       "2":"Erik, Erika, Aida",
       "3":"Blažej, Celerín, Celerína",
       "4":"Veronika, Nika, Verena, Verona",
@@ -51,7 +54,7 @@ Example:
       ...
       ...
    },
-   "2":{
+   "3":{
     "1":"Albín",
       "2":"Anežka",
       "3":"Bohumil, Bohumila, Ticián, Ginda, Kunigunda, Ticiána",
@@ -65,7 +68,7 @@ Example:
    }
 ```
 
-So - first key is month and second key is day number of the month. Of course the first month is not "0" so I made a little hack in the code.... When checking what is current month O subtract 1 to get proper key ID....
+Originally I used this hack for the key id "0", but after I change the source json add added dummy key, this is not needed. 
 
 ```python
 today_names = namedays[str(today.month-1)][str(today.day)]

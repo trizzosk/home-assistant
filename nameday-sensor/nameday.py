@@ -22,8 +22,8 @@ def get_namedays():
         today = datetime.date.today()
         tomorrow = today + datetime.timedelta(days=1)
         # Get names for today and tomorrow
-        today_names = namedays[str(today.month-1)][str(today.day)]
-        tomorrow_names = namedays[str(tomorrow.month-1)][str(tomorrow.day)]
+        today_names = namedays[str(today.month)][str(today.day)]
+        tomorrow_names = namedays[str(tomorrow.month)][str(tomorrow.day)]
         # Create payload for MQTT
         today_payload = {
             "date": today.isoformat(),
