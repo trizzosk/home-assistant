@@ -1,8 +1,8 @@
-# Nameday sensor in Hone Assistant - my way
+# Nameday sensor in Home Assistant - my way
 
 There are 2 parts of the guideline:
 - get data from web and post them to Home Assistant (MQTT) using python script
-- configure a custom sensor in Home Assistant
+- configure a custom sensor MQTT in Home Assistant
 
 # Get data and post them to HA using python
 
