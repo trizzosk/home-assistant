@@ -27,7 +27,7 @@ Let's be honest - I am not perfect. Quite often I forgot about names and nameday
 
 I tried several solutions and addons for Home assistant. Some good, some awful, some bad. I find a pretty simple json file on github which contains structured data - I made a fork of it but the original kudos goes to [@zoltancsontos](https://github.com/zoltancsontos) on github (original repo: [here](https://github.com/zoltancsontos/slovak-name-days-json)).
 
-More details and how it works - see [this document](./nameday-sensor/nameday-sensor.md).
+More details and how it works - see [this document](./nameday-sensor/README.md).
 
 # To-Do:
 
