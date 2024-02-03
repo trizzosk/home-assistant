@@ -9,6 +9,8 @@ I have couple of sensors placed in my appartment measuring room temperature, hum
 
 tbd...
 
+Check the code inside the [code](./code/) folder.
+
 # Basic idea and objectives
 
 Some years ago freind of mine prepared similar device for his purpose - simple meteo dashboard showing actual weather and precipation from home sensors. I came to idea to use the concept and present measurements for anybody. 
