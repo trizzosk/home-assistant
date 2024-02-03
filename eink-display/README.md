@@ -24,7 +24,7 @@ All listed components are easy to obtain and available on many eshops. Of course
 | Component | Link |
 | --- | --- |
 | LilyGO TTGO T5-4.7" E-Paper ESP32-S3 | [Laskakit.cz](https://www.laskakit.cz/lilygo-ttgo-t5-4-7--e-paper-esp32-wifi-modul/) |
-| 18650 battery holder | [Laskakit.cz](https://www.laskakit.cz/bateriovy-box-1x18650-do-dps/) |
+| LiPol battery unit | [Laskakit.cz](https://www.laskakit.cz/ehao-lipol-baterie-603048-900mah-3-7v/) |
 
 **Software components:**
 
@@ -40,3 +40,7 @@ Here are main software components which I used for inspiration about the concept
 # 3D printed case
 
 Since the ESP32-S3 board is not very often used, it was tricky to find proper 3D model for this board. However, I found one [here](https://www.printables.com/model/522518-lilygo-t5-47-s3-e-paper-case). Be aware that battery will not fit inside as well as soldered GPIO head. 
+
+# Image convertion (Material Design Icons)
+
+For converting images (Material Design Icons) I use `imgconvert.py` script available [here](https://github.com/Xinyuan-LilyGO/LilyGo-EPD47/blob/master/scripts/imgconvert.py). Just be aware that you have to use jpg file format for conversion. The png format with trasnparency is not properly converted.
