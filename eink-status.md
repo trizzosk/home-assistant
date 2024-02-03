@@ -1,6 +1,9 @@
 # Simple status display using eink Lilygo EPD47 unit
 
-I have couple of sensors placed in my appartment measuring room temperature, humidity, CO2 and particles. I added all those data to `Home Assistant` dashboard but wanted to present the data for anybody at home also who does not use the mobile app. 
+I have couple of sensors placed in my appartment measuring room temperature, humidity, CO2 and particles. I added all those data to `Home Assistant` dashboard but wanted to present the data for anybody at home also who does not use the mobile app.
+
+![Front side](20240203_140140_5220491365269653277.jpg)
+![Back side](20240203_140036_8090161508967312431.jpg)
 
 # Table of contents
 
@@ -39,3 +42,6 @@ Here are main software components which I used for inspiration about the concept
 | Arduino_JSON | [Github.com](https://github.com/arduino-libraries/Arduino_JSON) | 
 | NTP library for Arduino framework | [Github.com](https://github.com/sstaub/NTP) |
 
+# 3D printed case
+
+Since the ESP32-S3 board is not very often used, it was tricky to find proper 3D model for this board. However, I found one [here](https://www.printables.com/model/522518-lilygo-t5-47-s3-e-paper-case). Be aware that battery will not fit inside as well as soldered GPIO head. 
