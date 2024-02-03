@@ -2,12 +2,8 @@
 
 I have couple of sensors placed in my appartment measuring room temperature, humidity, CO2 and particles. I added all those data to `Home Assistant` dashboard but wanted to present the data for anybody at home also who does not use the mobile app.
 
-![Front side](20240203_140140_5220491365269653277.jpg)
-![Back side](20240203_140036_8090161508967312431.jpg)
-
-# Table of contents
-
-tbd...
+![Front side](images/20240203_140140_5220491365269653277.jpg)
+![Back side](images/20240203_140036_8090161508967312431.jpg)
 
 Check the code inside the [code](./code/) folder.
 
@@ -27,11 +23,8 @@ All listed components are easy to obtain and available on many eshops. Of course
 
 | Component | Link |
 | --- | --- |
-| LilyGO TTGO T5-4.7" E-Paper ESP32 | [Laskakit.cz](https://www.laskakit.cz/lilygo-ttgo-t5-4-7--e-paper-esp32-wifi-modul/) |
+| LilyGO TTGO T5-4.7" E-Paper ESP32-S3 | [Laskakit.cz](https://www.laskakit.cz/lilygo-ttgo-t5-4-7--e-paper-esp32-wifi-modul/) |
 | 18650 battery holder | [Laskakit.cz](https://www.laskakit.cz/bateriovy-box-1x18650-do-dps/) |
-
->**Information**:<br>
->There are 2 `LilyGO TTGO T5-4.7" E-Paper ESP32` available - one with 18650 battery holder soldered on board or with `JST-PH` connector for external battery.
 
 **Software components:**
 

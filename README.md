@@ -15,7 +15,7 @@ Detailed step-by-step procedure is in [this document](./laskakit-vindriktning.md
 
 # Simple status display using eink Lilygo EPD47 unit
 
-Using quite cheap `Lilygo EPD47` eink diplay unit we have immediate overview about current status - details are [here](./eink-status.md).
+Using quite cheap `Lilygo EPD47` eink diplay unit we have immediate overview about current status - details are [here](./eink-display/README.md).
 
 # Daily backups with backup offloading, using `Samba Backup` add-on
 
