@@ -37,6 +37,32 @@ Here are main software components which I used for inspiration about the concept
 | Arduino_JSON | [Github.com](https://github.com/arduino-libraries/Arduino_JSON) | 
 | NTP library for Arduino framework | [Github.com](https://github.com/sstaub/NTP) |
 
+# Fetching values from Homeassistant
+
+This was quite straight forward. I use `Rest API` of the `HomeAsisstant` to get latest state values from sensors which I want to show results from. The `API endpoints` are defined in variables with `req_` prefix. See example:
+
+```c++
+//OFFICE
+const char *req_temp_office = "http://__IP__:8123/api/states/sensor.hb_office_space_temperature";
+const char *req_hum_office = "http://__IP__:8123/api/states/sensor.hb_office_space_humidity";
+
+//BEDROOM
+const char *req_temp_bedroom = "http://__IP__:8123/api/states/sensor.sonoff_a4800539db_temperature";
+const char *req_hum_bedroom = "http://__IP__:8123/api/states/sensor.sonoff_a4800539db_humidity";
+```
+
+Don't forget to use your own endpoints.
+
+# `httpGETRequest` - adjust the bearer token
+
+Don't forget to add your own `API` token for authentication against `Homeassistant`. Just replace `__BEARER_TOKEN__` with your own token:
+
+```c++
+http.addHeader("Authorization", "Bearer __BEARER_TOKEN__");
+```
+
+The method returns `JSON` payload as string.
+
 # 3D printed case
 
 Since the ESP32-S3 board is not very often used, it was tricky to find proper 3D model for this board. However, I found one [here](https://www.printables.com/model/522518-lilygo-t5-47-s3-e-paper-case). Be aware that battery will not fit inside as well as soldered GPIO head. 
