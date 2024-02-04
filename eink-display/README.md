@@ -44,3 +44,48 @@ Since the ESP32-S3 board is not very often used, it was tricky to find proper 3D
 # Image convertion (Material Design Icons)
 
 For converting images (Material Design Icons) I use `imgconvert.py` script available [here](https://github.com/Xinyuan-LilyGO/LilyGo-EPD47/blob/master/scripts/imgconvert.py). Just be aware that you have to use jpg file format for conversion. The png format with trasnparency is not properly converted.
+
+# Dynamic refresh time based on time of the day
+
+I came to the idea that during night there is no reason to refresh data on display every 15 minutes. This will refresh data every 60 minutes between 22:00 (10:00pm) and 5:00 (05:00am).
+
+```C++
+void loop()
+{
+  ...
+  ...
+  ...
+  // Change the IP address of your prefered NTP server
+  configTime(3600, 0, "192.168.0.1");
+
+  struct tm timeinfo;
+  if (!getLocalTime(&timeinfo)) {
+    Serial.println("Failed to obtain time");
+    return;
+  }
+
+  // Determine deep sleep duration based on the current time
+  int deepSleepMinutes;
+
+  if (timeinfo.tm_hour >= 5 && timeinfo.tm_hour < 22)
+  {
+    deepSleepMinutes = 15; // Daytime deep sleep period
+  }
+  
+  else
+  {
+    deepSleepMinutes = 60; // Nighttime deep sleep period
+  }
+
+  int deepSleepMiliseconds = (deepSleepMinutes*60)*1000000;
+  ...
+  ...
+  ...
+}
+```
+
+Then I changed parameter of the `esp_sleep_enable_timer_wakeup()` function to use dynamically calculated wakeup timer:
+
+```c++
+esp_sleep_enable_timer_wakeup(deepSleepMiliseconds);
+```
