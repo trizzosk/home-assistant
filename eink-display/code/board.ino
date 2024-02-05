@@ -257,29 +257,31 @@ void loop()
   configTime(0, 0, "192.168.0.1");
 
   struct tm timeinfo;
-  if (!getLocalTime(&timeinfo)) {
+  if (!getLocalTime(&timeinfo))
+  {
     Serial.println("Failed to obtain time");
     return;
   }
 
   // Determine deep sleep duration based on the current time
   int deepSleepMinutes;
-  if (timeinfo.tm_hour >= 5 && timeinfo.tm_hour < 22) {
-    deepSleepMinutes = 15; // Daytime deep sleep period
-  } else {
-    deepSleepMinutes = 60; // Nighttime deep sleep period
-  }
 
-  int deepSleepMiliseconds = (deepSleepMinutes*60)*1000000;
+  if (timeinfo.tm_hour >= 5 && timeinfo.tm_hour < 22)
+  {
+    deepSleepMinutes = 15 * 60; // 15 minutes * 60 seconds
+  } 
+  
+  else
+  {
+    deepSleepMinutes = 60 * 60; // 60 minutes * 60 seconds
+  }
 
   // finally, deepsleep
   WiFi.disconnect();
 
-  // sleep for 15 minutes = 900 seconds to micro-seconds
-  // 15 mins * 60 secs = 900 * 1.000.000
-
   Serial.println("Reaching deepsleep...");
 
+  // If in DEBUG mode, just wait for some time, stay awake and restart
   if (DEBUG == 1)
   {
     delay(6000);
@@ -287,7 +289,8 @@ void loop()
 
   else
   {
-    esp_sleep_enable_timer_wakeup(deepSleepMiliseconds);
+    // Not in DEBUG mode so enter deepsleep for certain period based on deepSLeppMinutes value
+    esp_sleep_enable_timer_wakeup(deepSleepMinutes * 1000000);
 
     esp_deep_sleep_start();
   }
