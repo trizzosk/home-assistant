@@ -254,27 +254,7 @@ void loop()
 
   epd_poweroff_all();
 
-  configTime(0, 0, "192.168.0.1");
-
-  struct tm timeinfo;
-  if (!getLocalTime(&timeinfo))
-  {
-    Serial.println("Failed to obtain time");
-    return;
-  }
-
-  // Determine deep sleep duration based on the current time
-  int deepSleepMinutes;
-
-  if (timeinfo.tm_hour >= 5 && timeinfo.tm_hour < 22)
-  {
-    deepSleepMinutes = 15 * 60; // 15 minutes * 60 seconds
-  } 
-  
-  else
-  {
-    deepSleepMinutes = 60 * 60; // 60 minutes * 60 seconds
-  }
+  int deepSleepMinutes = 900;
 
   // finally, deepsleep
   WiFi.disconnect();
