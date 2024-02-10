@@ -68,6 +68,10 @@
 #include "weather-cloudy.h"
 #include "molecule-co2.h"
 #include "cake-variant.h"
+#include "weather-sunset-up.h"
+#include "weather-sunset-down.h"
+
+#include <TimeLib.h>
 
 #define SCREEN_WIDTH EPD_WIDTH
 #define SCREEN_HEIGHT EPD_HEIGHT
@@ -79,7 +83,7 @@
 #define Black 0x00
 
 #define BATT_PIN   (14)
-#define MIN_USB_VOL 4.0
+#define MIN_USB_VOL 4.2
 
 #define MQTT_VERSION MQTT_VERSION_3_1_1
 
@@ -140,6 +144,7 @@ const PROGMEM char* MQTT_USER = "mqtt_user";
 const PROGMEM char* MQTT_PASSWORD = "mqtt_password";
 const PROGMEM char* MQTT_SENSOR_TOPIC = "obyvacka_eink_display/battery";
 const PROGMEM char* MQTT_SENSOR_TOPIC1 = "obyvacka_eink_display/last_update";
+const PROGMEM char* MQTT_SENSOR_TOPIC2 = "obyvacka_eink_display/suntimes";
 
 /*
   DEBUG switch
@@ -524,7 +529,7 @@ void GetAndDisplayStatuses()
 
   epd_draw_grayscale_image(sofa_area, (uint8_t *) sofa_data);
 
-  int cursor_x = 85;
+  int cursor_x = 90;
   int cursor_y = 50;
 
   const char *c_line1 = sLivingTemp.c_str();
@@ -544,7 +549,7 @@ void GetAndDisplayStatuses()
 
   const char *c_line2 = sLivingHum.c_str();
 
-  cursor_x = 85;
+  cursor_x = 90;
   cursor_y += 50;
 
   writeln((GFXfont *)&FiraSans, c_line2, &cursor_x, &cursor_y, NULL);
@@ -553,7 +558,7 @@ void GetAndDisplayStatuses()
 
   const char *c_line3 = sLivingCO2.c_str();
 
-  cursor_x = 85;
+  cursor_x = 90;
   cursor_y += 50;
 
   Rect_t co2_area = {
@@ -571,7 +576,7 @@ void GetAndDisplayStatuses()
 
   const char *c_line4 = sZoeTemp.c_str();
 
-  cursor_x = 85;
+  cursor_x = 90;
   cursor_y += 50;
 
   Rect_t cat_area = {
@@ -589,7 +594,7 @@ void GetAndDisplayStatuses()
 
   const char *c_line5 = sZoeHum.c_str();
 
-  cursor_x = 85;
+  cursor_x = 90;
   cursor_y += 50;
 
   cat_area = {
@@ -607,7 +612,7 @@ void GetAndDisplayStatuses()
 
   const char *c_line6 = sBedroomTemp.c_str();
 
-  cursor_x = 85;
+  cursor_x = 90;
   cursor_y += 50;
 
   Rect_t bed_area = {
@@ -625,7 +630,7 @@ void GetAndDisplayStatuses()
 
   const char *c_line7 = sBedroomHum.c_str();
 
-  cursor_x = 85;
+  cursor_x = 90;
   cursor_y += 50;
 
   bed_area = {
@@ -643,7 +648,7 @@ void GetAndDisplayStatuses()
 
   const char *c_line8 = sOfficeTemp.c_str();
 
-  cursor_x = 85;
+  cursor_x = 90;
   cursor_y += 50;
 
   Rect_t office_area = {
@@ -661,7 +666,7 @@ void GetAndDisplayStatuses()
 
   const char *c_line9 = sOfficeHum.c_str();
 
-  cursor_x = 85;
+  cursor_x = 90;
   cursor_y += 50;
 
   office_area = {
@@ -681,7 +686,7 @@ void GetAndDisplayStatuses()
 
   const char *c_line10 = line111.c_str();
 
-  cursor_x = 85;
+  cursor_x = 90;
   cursor_y += 50;
 
   Rect_t timer_area = {
@@ -695,6 +700,7 @@ void GetAndDisplayStatuses()
 
   writeln((GFXfont *)&FiraSans, c_line10, &cursor_x, &cursor_y, NULL);
 
+  delay(500);
 }
 
 void DisplayBatteryStatus()
@@ -720,22 +726,31 @@ void DisplayBatteryStatus()
 
   uint16_t v = analogRead(BATT_PIN);
 
-  float battery_voltage = (((float)v / 4095.0) * 2.0 * 3.3 * (vref / 1000.0));
+  //float battery_voltage = (((float)v / 4095.0) * 2.0 * 3.3 * (vref / 1000.0));
 
-  if (battery_voltage > MIN_USB_VOL)
+  float battery_voltage = (((float)v / 4096.0) * 6.566 * (vref / 1000.0));
+
+  //float batt_max = MIN_USB_VOL;
+
+  //float batt_min = 3.3;
+
+  //float batt_range = batt_max - batt_min;
+
+  //float batt_diff = battery_voltage - batt_min;
+
+  //float batt_percentage = (batt_diff / batt_range) * 100;
+
+  uint8_t batt_percentage = 2836.9625 * pow(battery_voltage, 4) - 43987.4889 * pow(battery_voltage, 3) + 255233.8134 * pow(battery_voltage, 2) - 656689.7123 * battery_voltage + 632041.7303;
+
+  if (battery_voltage >= 4.20)
   {
-    battery_voltage = MIN_USB_VOL;
+    batt_percentage = 100; 
   }
-  
-  float batt_max = MIN_USB_VOL;
 
-  float batt_min = 3.3;
-
-  float batt_range = batt_max - batt_min;
-
-  float batt_diff = battery_voltage - batt_min;
-
-  float batt_percentage = (batt_diff / batt_range) * 100;
+  if (battery_voltage <= 3.20)
+  {
+    batt_percentage = 0;
+  }
 
   digitalWrite(14, LOW);
 
@@ -757,6 +772,8 @@ void DisplayBatteryStatus()
 
   writeln((GFXfont *)&FiraSans, c_line1, &cursor_x, &cursor_y, NULL);
 
+  delay(500);
+
   cursor_x = 500;
   cursor_y += 50;
 
@@ -774,6 +791,8 @@ void DisplayBatteryStatus()
   epd_draw_grayscale_image(battery_area, (uint8_t *) battery_data);
 
   writeln((GFXfont *)&FiraSans, c_line2, &cursor_x, &cursor_y, NULL);
+
+  delay(500);
 
   PublishData(String(battery_voltage), String(batt_percentage));
 }
@@ -824,6 +843,8 @@ void DisplayWeather ()
 
     writeln((GFXfont *)&FiraSans, c_line99, &cursor_x, &cursor_y, NULL);
 
+    delay(500);
+
     weather_area = {
       .x = 440,
       .y = 164,
@@ -837,155 +858,73 @@ void DisplayWeather ()
     epd_draw_grayscale_image(weather_area, (uint8_t *) weather_data);
 
     writeln((GFXfont *)&FiraSans, c_line999, &cursor_x, &cursor_y, NULL);
+
+    delay(500);
   }
 }
 
-String httpGETRequest(const char *serverName) 
+void DisplayNextBirthdays ()
 {
-  HTTPClient http;
+  String nextBirthday, sNextBirthday;
 
-  http.begin(serverName);
+  nextBirthday = "";
+  sNextBirthday = "";
 
-  http.addHeader("Authorization", "Bearer __BEARER_TOKEN__");
+  nextBirthday = httpGETRequest(req_next_birthday);
 
-  // Send HTTP POST request
-  int httpResponseCode = http.GET();
+  JSONVar js_nextBirthday = JSON.parse(nextBirthday);
 
-  String payload = "{}";
-
-  if (httpResponseCode > 0) 
+  if (DEBUG == 1 && JSON.typeof(js_nextBirthday) == "undefined")
   {
-    if (DEBUG == 1) 
-    {
-      Serial.print("HTTP Response code: ");
-      Serial.println(httpResponseCode);
-    }
-    payload = http.getString();
-  }
-
-  else 
-  {
-    if (DEBUG == 1)
-    {
-      Serial.print("Error code: ");
-      Serial.println(httpResponseCode);
-    }
-  }
-
-  // Free resources
-  http.end();
-
-  return payload;
-}
-
-String GetCurrentTime()
-{
-  delay(100);
-
-  ntp.update();
-
-  JSONVar myJson;
-
-  myJson["last_updated"] = ntp.formattedTime("%d.%m.%Y %H:%M");
-
-  String jsonString = JSON.stringify(myJson);
-
-  if (!client.connected())
-  {
-    reconnect();
-
-    client.publish(MQTT_SENSOR_TOPIC1, jsonString.c_str(), true);
-
-    delay (200);
-
-    yield();
-
-    client.loop();
-
-    client.disconnect();
-  }
-  
-  return ntp.formattedTime("%d.%m.%Y %H:%M");
-}
-
-void PublishData(String battVolt, String battPerc)
-{
-  if (battVolt == "" || battPerc == "")
-  {
-    if (DEBUG == 1)
-    {
-      Serial.print("MQTT PublishData: must contain values.\n\n");
-    }
+    Serial.println("next_birthday: Parsing JSON input failed!");
   }
 
   else
   {
-    JSONVar myJson;
-
-    myJson["voltage"] = battVolt;
-
-    myJson["percentage"] = battPerc;
-
-    String jsonString = JSON.stringify(myJson);
-
-    if (DEBUG == 1)
+    if (js_nextBirthday.hasOwnProperty("state"))
     {
-      Serial.print("****************************\nPrepared JSON for MQTT submit:" + jsonString + "\n\n");
-    }
-
-    if (!client.connected())
-    {
-      reconnect();
-
-      client.publish(MQTT_SENSOR_TOPIC, jsonString.c_str(), true);
-
-      delay (200);
-
-      yield();
-
-      client.loop();
-
-      client.disconnect();
-    }
-  }
-}
-
-void reconnect()
-{
-  // Loop until we're reconnected
-  while (!client.connected())
-  {
-    if (DEBUG == 1)
-    {
-      Serial.println("INFO: Attempting MQTT connection...");
-    }
-    
-    client.setServer(MQTT_SERVER_IP, MQTT_SERVER_PORT);
-
-    // Attempt to connect
-    if (client.connect(MQTT_CLIENT_ID, MQTT_USER, MQTT_PASSWORD))
-    {
-      if (DEBUG == 1)
+      if (JSON.stringify(js_nextBirthday["state"]) == "\"unavailable\"")
       {
-        Serial.println("INFO: connected");
-      }
-    } 
-
-    else
-    {
-      if (DEBUG == 1)
-      {
-        Serial.print("ERROR: failed, rc=");
-
-        Serial.print(client.state());
-
-        Serial.println("DEBUG: try again in 5 seconds");
+        sNextBirthday = "nezname...";
       }
 
-      // Wait 10 seconds before retrying
-      delay(10000);
+      else
+      {
+        sNextBirthday = JSON.stringify(js_nextBirthday["state"]);
+
+        sNextBirthday.replace("\"", "");
+      }
     }
   }
+
+  Rect_t cake_area = {
+      .x = 440,
+      .y = 214,
+      .width = cake_width,
+      .height = cake_height
+    };
+
+  epd_draw_grayscale_image(cake_area, (uint8_t *) cake_data);
+
+  String line_name = "Najbližšie narodeniny: ";
+
+  const char *c_line9 = line_name.c_str();
+
+  int cursor_x = 500;
+  int cursor_y = 250;
+
+  writeln((GFXfont *)&FiraSans, c_line9, &cursor_x, &cursor_y, NULL);
+
+  delay(500);
+
+  const char *c_line99 = sNextBirthday.c_str();
+
+  cursor_x = 500;
+  cursor_y = 300;
+
+  writeln((GFXfont *)&FiraSans, c_line99, &cursor_x, &cursor_y, NULL);
+
+  delay(500);
 }
 
 void DisplayNameDay ()
@@ -1040,12 +979,16 @@ void DisplayNameDay ()
 
   writeln((GFXfont *)&FiraSans, c_line9, &cursor_x, &cursor_y, NULL);
 
+  delay(500);
+
   const char *c_line99 = sNameDay.c_str();
 
   cursor_x = 500;
   cursor_y = 400;
 
   writeln((GFXfont *)&FiraSans, c_line99, &cursor_x, &cursor_y, NULL);
+
+  delay(500);
 }
 
 void DisplayNameDayTomorrow ()
@@ -1100,10 +1043,401 @@ void DisplayNameDayTomorrow ()
 
   writeln((GFXfont *)&FiraSans, c_line9, &cursor_x, &cursor_y, NULL);
 
+  delay(500);
+
   const char *c_line99 = sNameDay.c_str();
 
   cursor_x = 500;
   cursor_y = 500;
 
   writeln((GFXfont *)&FiraSans, c_line99, &cursor_x, &cursor_y, NULL);
+
+  delay(500);
+}
+
+void DisplaySunTimes ()
+{
+  String sunRise, sSunRise;
+
+  sunRise = "";
+  sSunRise = "";
+
+  //Sunrise
+  sunRise = httpGETRequest(req_sunrise);
+
+  JSONVar js_sunRise = JSON.parse(sunRise);
+
+  if (DEBUG == 1 && JSON.typeof(js_sunRise) == "undefined")
+  {
+    Serial.println("sunRise: Parsing JSON input failed!");
+  }
+
+  else
+  {
+    if (js_sunRise.hasOwnProperty("state"))
+    {
+      if (JSON.stringify(js_sunRise["state"]) == "\"unavailable\"")
+      {
+        sSunRise = "--:--";
+      }
+
+      else
+      {
+        sSunRise = JSON.stringify(js_sunRise["state"]);
+
+        sSunRise.replace("\"", "");
+      }
+    }
+  }
+
+  Rect_t sunrise_area = {
+      .x = 740,
+      .y = 14,
+      .width = sunset_up_width,
+      .height = sunset_up_height
+    };
+
+  epd_draw_grayscale_image(sunrise_area, (uint8_t *) sunset_up_data);
+
+  String datetimeString = sSunRise;
+
+  tmElements_t tm;
+
+  if (parseDateTime(datetimeString.c_str(), &tm))
+  {
+    // Add 1 hour
+    tm.Hour += 1;
+
+    // Ensure the hour doesn't exceed 23
+    tm.Hour %= 24;
+
+    // Format the result as HH:mm
+    String g = String(tm.Hour);
+
+    if (g.length() == 1)
+    {
+      g = "0" + g;
+    }
+
+    String h = String(tm.Minute);
+
+    if (h.length() == 1)
+    {
+      h = "0" + h;
+    }
+
+    //sSunRise = String(tm.Hour)+":"+String(tm.Minute);
+
+    sSunRise = g+":"+h;
+  }
+
+  else
+  {
+    sSunRise = "--:--";
+  }
+
+  String line_name = sSunRise;
+
+  const char *c_line9 = line_name.c_str();
+
+  int cursor_x = 800;
+  int cursor_y = 50;
+
+  writeln((GFXfont *)&FiraSans, c_line9, &cursor_x, &cursor_y, NULL);
+
+  delay(500);
+
+  // Sunset
+  String sSunSet;
+
+  String sunSet = httpGETRequest(req_sunset);
+
+  JSONVar js_sunSet = JSON.parse(sunSet);
+
+  if (DEBUG == 1 && JSON.typeof(js_sunSet) == "undefined")
+  {
+    Serial.println("sunSet: Parsing JSON input failed!");
+  }
+
+  else
+  {
+    if (js_sunSet.hasOwnProperty("state"))
+    {
+      if (JSON.stringify(js_sunSet["state"]) == "\"unavailable\"")
+      {
+        sSunSet = "--:--";
+      }
+
+      else
+      {
+        sSunSet = JSON.stringify(js_sunSet["state"]);
+
+        sSunSet.replace("\"", "");
+      }
+    }
+  }
+
+  Rect_t sunset_area = {
+      .x = 740,
+      .y = 64,
+      .width = sunset_down_width,
+      .height = sunset_down_height
+    };
+
+  epd_draw_grayscale_image(sunset_area, (uint8_t *) sunset_down_data);
+
+  datetimeString = sSunSet;
+
+  if (parseDateTime(datetimeString.c_str(), &tm))
+  {
+    // Add 1 hour
+    tm.Hour += 1;
+
+    // Ensure the hour doesn't exceed 23
+    tm.Hour %= 24;
+
+    // Format the result as HH:mm
+    String g = String(tm.Hour);
+
+    if (g.length() == 1)
+    {
+      g = "0" + g;
+    }
+
+    String h = String(tm.Minute);
+
+    if (h.length() == 1)
+    {
+      h = "0" + h;
+    }
+
+    sSunSet = g+":"+h;
+  }
+
+  else
+  {
+    sSunSet = "--:--";
+  }
+
+  line_name = sSunSet;
+
+  const char *c_line99 = line_name.c_str();
+
+  cursor_x = 800;
+  cursor_y = 100;
+
+  writeln((GFXfont *)&FiraSans, c_line99, &cursor_x, &cursor_y, NULL);
+
+  delay(500);
+
+  PublishSunData(sSunRise, sSunSet);
+
+}
+
+String GetCurrentTime()
+{
+  delay(100);
+
+  ntp.update();
+
+  JSONVar myJson;
+
+  myJson["last_updated"] = ntp.formattedTime("%d.%m.%Y %H:%M");
+
+  String jsonString = JSON.stringify(myJson);
+
+  if (!client.connected())
+  {
+    reconnect();
+
+    client.publish(MQTT_SENSOR_TOPIC1, jsonString.c_str(), true);
+
+    delay (200);
+
+    yield();
+
+    client.loop();
+
+    client.disconnect();
+  }
+  
+  return ntp.formattedTime("%d.%m.%Y %H:%M");
+}
+
+void reconnect()
+{
+  // Loop until we're reconnected
+  while (!client.connected())
+  {
+    if (DEBUG == 1)
+    {
+      Serial.println("INFO: Attempting MQTT connection...");
+    }
+    
+    client.setServer(MQTT_SERVER_IP, MQTT_SERVER_PORT);
+
+    // Attempt to connect
+    if (client.connect(MQTT_CLIENT_ID, MQTT_USER, MQTT_PASSWORD))
+    {
+      if (DEBUG == 1)
+      {
+        Serial.println("INFO: connected");
+      }
+    } 
+
+    else
+    {
+      if (DEBUG == 1)
+      {
+        Serial.print("ERROR: failed, rc=");
+
+        Serial.print(client.state());
+
+        Serial.println("DEBUG: try again in 5 seconds");
+      }
+
+      // Wait 10 seconds before retrying
+      delay(10000);
+    }
+  }
+}
+
+void PublishData(String battVolt, String battPerc)
+{
+  if (battVolt == "" || battPerc == "")
+  {
+    if (DEBUG == 1)
+    {
+      Serial.print("MQTT PublishData: must contain values.\n\n");
+    }
+  }
+
+  else
+  {
+    JSONVar myJson;
+
+    myJson["voltage"] = battVolt;
+
+    myJson["percentage"] = battPerc;
+
+    String jsonString = JSON.stringify(myJson);
+
+    if (DEBUG == 1)
+    {
+      Serial.print("****************************\nPrepared JSON for MQTT submit:" + jsonString + "\n\n");
+    }
+
+    if (!client.connected())
+    {
+      reconnect();
+
+      client.publish(MQTT_SENSOR_TOPIC, jsonString.c_str(), true);
+
+      delay (200);
+
+      yield();
+
+      client.loop();
+
+      client.disconnect();
+    }
+  }
+}
+
+void PublishSunData(String sunRise, String sunSet)
+{
+  if (sunRise == "" || sunSet == "")
+  {
+    if (DEBUG == 1)
+    {
+      Serial.print("MQTT PublishData: must contain values.\n\n");
+    }
+  }
+
+  else
+  {
+    JSONVar myJson;
+
+    myJson["sunrise"] = sunRise;
+
+    myJson["sunset"] = sunSet;
+
+    String jsonString = JSON.stringify(myJson);
+
+    if (DEBUG == 1)
+    {
+      Serial.print("****************************\nPrepared JSON for MQTT submit:" + jsonString + "\n\n");
+    }
+
+    if (!client.connected())
+    {
+      reconnect();
+
+      client.publish(MQTT_SENSOR_TOPIC2, jsonString.c_str(), true);
+
+      delay (200);
+
+      yield();
+
+      client.loop();
+
+      client.disconnect();
+    }
+  }
+}
+
+String httpGETRequest(const char *serverName) 
+{
+  HTTPClient http;
+
+  http.begin(serverName);
+
+  http.addHeader("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhZjY4NWJhMjY5ZWY0MGFlYjg3MGExMWQ3ZjU2MzE5YyIsImlhdCI6MTY3NzA5MjAxMywiZXhwIjoxOTkyNDUyMDEzfQ.oiHjJv7N5WDeIzobcvAv62q4_JApDYtSwecH0iSzWco");
+
+  // Send HTTP POST request
+  int httpResponseCode = http.GET();
+
+  String payload = "{}";
+
+  if (httpResponseCode > 0) 
+  {
+    if (DEBUG == 1) 
+    {
+      Serial.print("HTTP Response code: ");
+      Serial.println(httpResponseCode);
+    }
+    payload = http.getString();
+  }
+
+  else 
+  {
+    if (DEBUG == 1)
+    {
+      Serial.print("Error code: ");
+      Serial.println(httpResponseCode);
+    }
+  }
+
+  // Free resources
+  http.end();
+
+  return payload;
+}
+
+bool parseDateTime(const char *datetime, tmElements_t *tm)
+{
+  int year, month, day, hour, minute, second;
+  
+  if (sscanf(datetime, "%d-%d-%dT%d:%d:%d", &year, &month, &day, &hour, &minute, &second) == 6)
+  {
+    tm->Year = year - 1970;
+    tm->Month = month;
+    tm->Day = day;
+    tm->Hour = hour;
+    tm->Minute = minute;
+    tm->Second = second;
+    return true;
+  }
+
+  return false;
 }
