@@ -74,3 +74,7 @@ For converting images (Material Design Icons) I use `imgconvert.py` script avail
 # Dynamic refresh time based on time of the day
 
 Original code did not funtion as expected so I reverted back to setting 15 minutes refresh time. I need to sort this out.
+
+# 3D case model and adjustments
+
+The original case which I used is created by [@ramatomo](https://www.printables.com/@ramatomo_893887) and published [here on 3dprintables](https://www.printables.com/model/522518-lilygo-t5-47-s3-e-paper-case). However since the GPIO hat is already soldered on the board I need to cutout a small window and adjust the stand. 
