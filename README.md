@@ -47,5 +47,5 @@ I wanted to have a simple sensor showing next lucky person to have bitrhday part
 
 ![Progress of the year](./year-progress/images/Screenshot%202024-04-28%20at%2020.34.06.png)
 
-There is a simple profile on X network [@year_progress](https://twitter.com/year_progress?) which shows fancy progress bar every day as a percentage of actual year progress. Want to have this in your HomeAssistant? So [check this out](./year-progress/year-progress.md).
+There is a simple profile on X network [@year_progress](https://twitter.com/year_progress) which shows fancy progress bar every day as a percentage of actual year progress. Want to have this in your HomeAssistant? So [check this out](./year-progress/year-progress.md).
 <br>
