@@ -7,6 +7,7 @@ This guideline **include** my setup of the `Home Assistant`, especially:
 - Very simple, basic, Home alarm (sensors, management, etc.)
 - Custom nameday sensor with Slovakian names
 - Showing upcoming birthdays of your chosen family members
+- Fancy year progress sensor (% of actual year of 365 days) with beautiful progress bar on your dashboard
 
 This guideline **does not cover/include** standard `Home Assistant` setup procedure (hardware and software), including booting from PCIe SSD, etc..
 
@@ -21,6 +22,8 @@ Provided code is dirty, sometimes can be not fully optimized. But still works pr
 Detailed step-by-step procedure is in [this document](./laskakit-vindriktning.md).
 
 # Simple status display using eink Lilygo EPD47 unit
+
+![eInk display](./eink-display/images/20240203_140140_5220491365269653277.jpg)
 
 Using quite cheap `Lilygo EPD47` eink diplay unit we have immediate overview about current status - details are [here](./eink-display/README.md).
 
@@ -40,8 +43,9 @@ More details and how it works - see [this document](./nameday-sensor/README.md).
 
 I wanted to have a simple sensor showing next lucky person to have bitrhday party. I was struggling because there was no really smooth and easy integration so I started my small research and setup. For more details have a look in [this document](./birthdays-sensor.md).
 
-# To-Do:
+# Fancy year progress sensor (% of actual year of 365 days)
 
-Additional chapters will be provided in upcoming days/weeks:
-- Custom, pretty easy and basic, home alarm using PIR and door sensors, Node-Red flows and Matrix messenger component for notifications and commands
+![Progress of the year](./year-progress/images/Screenshot%202024-04-28%20at%2020.34.06.png)
 
+There is a simple profile on X network [@year_progress](https://twitter.com/year_progress?) which shows fancy progress bar every day as a percentage of actual year progress. Want to have this in your HomeAssistant? So [check this out](./year-progress/year-progress.md).
+<br>
